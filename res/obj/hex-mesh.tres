@@ -1,0 +1,9 @@
+[gd_resource type="CylinderMesh" load_steps=2 format=3 uid="uid://t8kdcb3nkjsc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_upg61"]
+
+[resource]
+material = SubResource("StandardMaterial3D_upg61")
+height = 0.05
+radial_segments = 6
+rings = 2

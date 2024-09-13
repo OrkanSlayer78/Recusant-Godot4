@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cx5w7wkceigqw"]
+
+[ext_resource type="Script" path="res://scripts/overworld/hex_grid.gd" id="1_hp1do"]
+[ext_resource type="PackedScene" uid="uid://dgiyih0a7kq3t" path="res://scenes/overworld/hex_tile.tscn" id="2_hc8mb"]
+[ext_resource type="PackedScene" uid="uid://cqyu5f1h4skll" path="res://scenes/overworld/player.tscn" id="3_w26oj"]
+
+[node name="Hex-Grid" type="Node3D"]
+script = ExtResource("1_hp1do")
+hex_tile = ExtResource("2_hc8mb")
+player = ExtResource("3_w26oj")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-3.64604e-08, -0.551588, 0.834117, -2.41107e-08, 0.834117, 0.551588, -1, 0, -4.37114e-08, 2, 1, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="DirectionalLight3D"]
+transform = Transform3D(-0.0846866, 0.549606, -0.83112, -0.549606, 0.669985, 0.499052, 0.83112, 0.499052, 0.245328, -4.72154, 5.12263, -1.07398)
+light_color = Color(0.7308, 0.73808, 0.84, 1)
