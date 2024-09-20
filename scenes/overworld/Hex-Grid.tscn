@@ -1,17 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://cx5w7wkceigqw"]
+[gd_scene load_steps=5 format=3 uid="uid://cx5w7wkceigqw"]
 
 [ext_resource type="Script" path="res://scripts/overworld/hex_grid.gd" id="1_hp1do"]
 [ext_resource type="PackedScene" uid="uid://dgiyih0a7kq3t" path="res://scenes/overworld/hex_tile.tscn" id="2_hc8mb"]
 [ext_resource type="PackedScene" uid="uid://cqyu5f1h4skll" path="res://scenes/overworld/player.tscn" id="3_w26oj"]
+[ext_resource type="PackedScene" uid="uid://d0841oqpcivuj" path="res://scenes/overworld/POI.tscn" id="4_pdg3t"]
 
 [node name="Hex-Grid" type="Node3D"]
 script = ExtResource("1_hp1do")
 hex_tile = ExtResource("2_hc8mb")
 player = ExtResource("3_w26oj")
+poi_scene = ExtResource("4_pdg3t")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-3.64604e-08, -0.551588, 0.834117, -2.41107e-08, 0.834117, 0.551588, -1, 0, -4.37114e-08, 2, 1, 0)
+transform = Transform3D(-0.758248, -0.189768, 0.623737, -1.27231e-08, 0.956702, 0.29107, -0.651966, 0.220703, -0.725417, 2, 1, 0)
+light_color = Color(0.616, 0.7, 0.6188, 1)
+light_energy = 0.645
+light_indirect_energy = 0.405
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="DirectionalLight3D"]
-transform = Transform3D(-0.0846866, 0.549606, -0.83112, -0.549606, 0.669985, 0.499052, 0.83112, 0.499052, 0.245328, -4.72154, 5.12263, -1.07398)
-light_color = Color(0.7308, 0.73808, 0.84, 1)
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.996408, 0.046712, -0.0706385, 0, 0.834117, 0.551588, 0.0846865, -0.549606, 0.83112, -1.72141, 4.68048, 4.72154)
+light_color = Color(0.7954, 0.91762, 0.97, 1)
+light_energy = 2.263
+light_indirect_energy = 1.27
+light_volumetric_fog_energy = 0.0
+light_angular_distance = 16.05

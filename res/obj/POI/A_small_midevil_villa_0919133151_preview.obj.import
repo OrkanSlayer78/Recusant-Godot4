@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cssv8shfbb3hq"
+path="res://.godot/imported/A_small_midevil_villa_0919133151_preview.obj-f19e92cfb636f3fc0bd9e51a172f4d85.mesh"
+
+[deps]
+
+files=["res://.godot/imported/A_small_midevil_villa_0919133151_preview.obj-f19e92cfb636f3fc0bd9e51a172f4d85.mesh"]
+
+source_file="res://res/obj/POI/A_small_midevil_villa_0919133151_preview.obj"
+dest_files=["res://.godot/imported/A_small_midevil_villa_0919133151_preview.obj-f19e92cfb636f3fc0bd9e51a172f4d85.mesh", "res://.godot/imported/A_small_midevil_villa_0919133151_preview.obj-f19e92cfb636f3fc0bd9e51a172f4d85.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

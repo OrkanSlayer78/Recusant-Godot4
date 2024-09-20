@@ -8,6 +8,7 @@ extends Node3D
 @export var max_zoom: float = 25.0  # Maximum distance for zoom
 @export var zoom_speed: float = 1.0  # Speed at which the camera zooms
 @export var rotation_speed: float = 2.0  # Speed at which the camera rotates around the player
+@export var turn_speed: float = 5.0  # Speed of player rotation
 
 var target_position: Vector3
 var is_moving: bool = false
@@ -20,16 +21,22 @@ func _ready():
 	# Set the initial position and reference the camera
 	target_position = global_transform.origin
 	camera = $Camera3D  # Assuming the Camera3D node is a child of this node
+	camera.make_current()
 	update_camera_position()
 
 func _process(delta):
 	# Handle player movement
 	if is_moving:
-		var direction = (target_position - global_transform.origin).normalized()
-		global_transform.origin += direction * move_speed * delta
+		var direction = target_position - global_transform.origin
+		var distance = direction.length()
 
-		# If close enough to the target position, snap to it and stop moving
-		if global_transform.origin.distance_to(target_position) < 0.1:
+		if distance > 0.1:
+			direction = direction.normalized()
+			global_transform.origin += direction * move_speed * delta
+
+			# Rotate the player towards the movement direction
+			rotate_towards_direction(direction, delta)
+		else:
 			global_transform.origin = target_position
 			is_moving = false
 
@@ -45,13 +52,8 @@ func _process(delta):
 	elif Input.is_action_just_pressed("ui_scroll_down"):
 		camera_offset_distance = min(max_zoom, camera_offset_distance + zoom_speed)  # Zoom out
 
-	# Handle mobile pinch zoom
-	#handle_mobile_zoom(delta)
-
 	# Update camera position and make it look at the player
 	update_camera_position()
-
-
 
 # Move to a target hex, based on hex coordinates (q, r)
 func move_to_hex(q: int, r: int):
@@ -61,6 +63,12 @@ func move_to_hex(q: int, r: int):
 	# Convert hex coordinates to world position
 	target_position = hex_to_world_position(q, r)
 	is_moving = true
+
+# Rotate the player to face the movement direction
+func rotate_towards_direction(direction: Vector3, delta: float):
+	var target_rotation = direction.angle_to(Vector3.FORWARD)
+	# Smoothly rotate towards the target direction (turn_speed controls how fast the rotation is)
+	rotation.y = lerp_angle(rotation.y, atan2(direction.x, direction.z), turn_speed * delta)
 
 # Convert hex coordinates to world position
 func hex_to_world_position(q: int, r: int) -> Vector3:
@@ -73,8 +81,10 @@ func update_camera_position():
 	# Calculate the new camera position based on the rotation angle and zoom level
 	var camera_x = camera_offset_distance * cos(camera_angle)
 	var camera_z = camera_offset_distance * sin(camera_angle)
-	var camera_position = global_transform.origin + Vector3(camera_x, camera_height, camera_z)
+	var camera_target_position = global_transform.origin + Vector3(camera_x, camera_height, camera_z)
 
-	# Set the camera's position and make it look at the player
-	camera.global_transform.origin = camera_position
+	# Smooth camera movement using linear interpolation (lerp)
+	camera.global_transform.origin = camera.global_transform.origin.lerp(camera_target_position, 0.1)
+
+	# Make the camera look at the player
 	camera.look_at(global_transform.origin, Vector3.UP)

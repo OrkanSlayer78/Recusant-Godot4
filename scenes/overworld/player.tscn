@@ -7,7 +7,7 @@
 script = ExtResource("1_agmhv")
 
 [node name="orkanslayer78_an_isom_0823171255" parent="." instance=ExtResource("1_oe5py")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0441879, 0.573321, 0.000406981)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.0441879, 0.573321, 0.000406981)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.980939, 0.172186, -0.0900633, -0.0008866, 0.467446, 0.884021, 0.194316, -0.867091, 0.458688, 0, 0.978884, 3)

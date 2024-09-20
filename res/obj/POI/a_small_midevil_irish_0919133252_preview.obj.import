@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://d2wbkptb3r7xy"
+path="res://.godot/imported/a_small_midevil_irish_0919133252_preview.obj-95b7351b68afceecc5c7152f1793355d.mesh"
+
+[deps]
+
+files=["res://.godot/imported/a_small_midevil_irish_0919133252_preview.obj-95b7351b68afceecc5c7152f1793355d.mesh"]
+
+source_file="res://res/obj/POI/a_small_midevil_irish_0919133252_preview.obj"
+dest_files=["res://.godot/imported/a_small_midevil_irish_0919133252_preview.obj-95b7351b68afceecc5c7152f1793355d.mesh", "res://.godot/imported/a_small_midevil_irish_0919133252_preview.obj-95b7351b68afceecc5c7152f1793355d.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

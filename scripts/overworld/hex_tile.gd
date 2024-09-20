@@ -9,11 +9,21 @@ enum Biome {
 	FIELDS
 }
 
+#setup clickability
+signal hex_selected(q,r)
+
+var q: int
+var r: int
+
 # Cache the mesh instance and material reference
 var mesh_instance: MeshInstance3D
+var static_body: StaticBody3D
 var base_material: StandardMaterial3D
 
 func _ready():
+	# Get the StaticBody3d node
+	static_body = get_node("StaticBody3D")
+
 	# Get the MeshInstance3D node
 	mesh_instance = get_node("MeshInstance3D")  # Adjust path if necessary
 	if mesh_instance and mesh_instance.mesh:
@@ -55,39 +65,35 @@ func get_biome_from_elevation(elevation: float) -> Biome:
 		return Biome.MOUNTAINS
 
 # Adjust the height based on the biome
-func adjust_height(biome: Biome, elevation: float) -> void:
-	if mesh_instance == null:
-		print("Lost my mesh instance when trying to adjust height")
-		return
-
+func adjust_height(biome: Biome, elevation: float) -> float:
 	var scale_adjustment: float = 1.0
-	var height_adjustment: float = 0.0
+	var height_adjustment: float = 0
 
 	# Adjust the height and scale based on the biome
 	if biome == Biome.PLAINS:
-		height_adjustment = elevation * 0.5
+		height_adjustment = elevation
 		scale_adjustment = 3
 	elif biome == Biome.HILLS:
-		height_adjustment = elevation * 0.7
-		scale_adjustment = 5
+		height_adjustment = elevation * 2
+		scale_adjustment = 5 
 	elif biome == Biome.SWAMP:
-		height_adjustment = elevation * 0.2
+		height_adjustment = elevation * 3
 		scale_adjustment = 5
 	elif biome == Biome.FIELDS:
-		height_adjustment = elevation * 0.5
+		height_adjustment = elevation * 5
 		scale_adjustment = 5
 	elif biome == Biome.MOUNTAINS:
-		height_adjustment = elevation * 0.8
+		height_adjustment = elevation * 10
 		scale_adjustment = 10
 
 	# Modify the height (Y position) of the mesh
-	var new_transform = mesh_instance.transform
-	new_transform.origin.y = height_adjustment
-	mesh_instance.transform = new_transform
+	print(height_adjustment)
+	return height_adjustment
 
-	var new_scale = mesh_instance.scale
-	new_scale.y = scale_adjustment
-	mesh_instance.scale = new_scale
+
+func initialize_hex(q_val: int, r_val: int):
+	if static_body:
+		static_body.call("initialize_hex", q_val, r_val)
 
 # Adjust the color based on elevation and humidity
 func adjust_color(elevation: float, humidity: float) -> void:
@@ -98,19 +104,19 @@ func adjust_color(elevation: float, humidity: float) -> void:
 	# Define base color depending on the elevation
 	var base_color: Color
 	if elevation < -0.4:
-		base_color = Color(0.2, 0.1, 1)  # Blueish
+		base_color = Color(183/256.0, 172/256.0, 66/256.0)  # plains
 	elif elevation < 0.1:
-		base_color = Color(0.4, 0.4, 0.7)  # Light blue
+		base_color = Color(58/256.0, 71/256.0, 31/256.0)  # hill
 	elif elevation < 0.3:
-		base_color = Color(0.0, 0.5, 0.9)  # Greenish-blue
+		base_color = Color(49/256.0, 42/256.0, 42/256.0)  # swamp
 	elif elevation < 0.5:
-		base_color = Color(0.2, 0.1, 0.2)  # Darker green
+		base_color = Color(162/256.0, 163/256.0, 119/256.0)  # fields
 	else:
-		base_color = Color(0.4, 0.4, 0.4)  # Grayish
+		base_color = Color(109/256.0, 124/256.0, 122/256.0)  # mountains
 
 	# Adjust the color's blueness based on humidity
-	var blue_adjustment = clamp(humidity, 0.0, 0.5)
-	var final_color = base_color.lerp(Color(0.3, 0.3, 1.0), blue_adjustment)
+	var blue_adjustment = clamp(humidity, 0.0, 0.75)
+	var final_color = base_color.lerp(Color(-0.1, 0.8, .5), blue_adjustment)
 
 	# Apply the final color to the material
 	base_material.albedo_color = final_color
