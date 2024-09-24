@@ -87,7 +87,7 @@ func adjust_height(biome: Biome, elevation: float) -> float:
 		scale_adjustment = 10
 
 	# Modify the height (Y position) of the mesh
-	print(height_adjustment)
+	#print(height_adjustment)
 	return height_adjustment
 
 

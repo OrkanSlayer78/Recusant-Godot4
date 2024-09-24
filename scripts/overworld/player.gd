@@ -4,8 +4,8 @@ extends Node3D
 @export var hex_radius: float = 0.51  # Size of hex tiles
 @export var camera_offset_distance: float = 6.0  # Distance from the camera to the player
 @export var camera_height: float = 3.0  # Height of the camera relative to the player
-@export var min_zoom: float = 4.0  # Minimum distance for zoom
-@export var max_zoom: float = 25.0  # Maximum distance for zoom
+@export var min_zoom: float = 1.5  # Minimum distance for zoom
+@export var max_zoom: float = 10.0  # Maximum distance for zoom
 @export var zoom_speed: float = 1.0  # Speed at which the camera zooms
 @export var rotation_speed: float = 2.0  # Speed at which the camera rotates around the player
 @export var turn_speed: float = 5.0  # Speed of player rotation
