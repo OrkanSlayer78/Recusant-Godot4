@@ -100,7 +100,7 @@ func add_to_hex_map(hex: Node3D, q: int, r: int, tile_id: int, e_value, h_value)
 			var neighbor_id = hex_map[neighbor]["hex_id"]
 			var neighbor_position = hex_map[neighbor]["position"]
 			var elevation_diff = abs(e_value - hex_map[neighbor]["elevation"])
-			var cost = 1.0 + elevation_diff * 10.0  # Adjust cost based on elevation difference
+			var cost = 1.0 + elevation_diff * 50.0  # Adjust cost based on elevation difference
 
 			# Connect the current hex to the neighbor in AStar
 			global_astar.connect_points(tile_id, neighbor_id, cost)
@@ -143,10 +143,19 @@ func place_poi_on_tile(hex: Node3D, poi_type: PointOfInterestType):
 	#hex.add_child(poi)
 
 func _on_hex_selected(q: int, r: int):
-	print("Tile selected at q = ", q, "r = ", r)
-	if avatar:
-		avatar.call("move_to_hex", q, r)
-#road creation
+	#print("Tile selected at q = ", q, "r = ", r)
+	#if avatar:
+	#	avatar.call("move_to_hex", q, r)
+	print("Tile selected at q =", q, "r =", r)
+
+	# Find the path from the player's current position to the selected hex
+	var player_position = avatar.global_transform.origin
+	var target_position = hex_to_world_position(q, r, Vector3(0, 0, 0))  # Convert hex to world position
+
+	var path = find_path_with_elevation_cost(player_position, target_position)
+	avatar.call("move_along_path", path)  # Call the player's move_along_path function
+		
+
 func generate_roads():
 	for city_position in city_positions:
 		var nearest_city = find_nearest_city(city_position)
@@ -171,19 +180,39 @@ func get_path_positions(path: Array) -> Array:
 				break  # Stop searching once we've found the matching hex
 	return positions
 	
+
 func create_curved_road(path: Array):
+	var width = 0.1
 	if path.size() < 2:
 		print("Path too short to create a road.")
 		return
 
 	# Create SurfaceTool and start drawing a line
 	var surface_tool = SurfaceTool.new()
-	surface_tool.begin(Mesh.PRIMITIVE_LINE_STRIP)
+	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 
 	# Add all points from the path to the surface tool
-	for point in path:
-		print("Adding point to path")
-		surface_tool.add_vertex(point)
+	#for point in path:
+	#	print("Adding point to path")
+	#	surface_tool.add_vertex(point)
+	
+	for i in range(path.size() - 1):
+		var point_a = path[i] + Vector3(0,.07,0)
+		var point_b = path[i + 1] +Vector3(0,.07,0)
+		
+		# Calculate the direction between the points
+		var direction = (point_b - point_a).normalized()
+		
+		# Calculate perpendicular offset for road width
+		var perpendicular = Vector3(-direction.z, 0, direction.x) * width
+		
+		# Add two vertices for each point to create the width of the road
+		surface_tool.add_vertex(point_a + perpendicular)  # Left side of the road
+		surface_tool.add_vertex(point_a - perpendicular)  # Right side of the road
+		
+		surface_tool.add_vertex(point_b + perpendicular)  # Left side of the road
+		surface_tool.add_vertex(point_b - perpendicular)  # Right side of the road
+
 
 	# Commit the mesh to ImmediateMesh
 	var road_mesh = surface_tool.commit()

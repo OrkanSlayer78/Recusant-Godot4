@@ -13,6 +13,8 @@ extends Node3D
 var target_position: Vector3
 var is_moving: bool = false
 var camera_angle: float = 0.0  # Camera rotation angle around the player
+var current_path = []
+var current_path_index = 0
 
 # Reference to the camera node
 var camera: Camera3D
@@ -27,18 +29,22 @@ func _ready():
 func _process(delta):
 	# Handle player movement
 	if is_moving:
-		var direction = target_position - global_transform.origin
-		var distance = direction.length()
-
-		if distance > 0.1:
-			direction = direction.normalized()
-			global_transform.origin += direction * move_speed * delta
-
-			# Rotate the player towards the movement direction
-			rotate_towards_direction(direction, delta)
-		else:
+		# Move toward the target position
+		var direction = (target_position - global_transform.origin).normalized()
+		global_transform.origin += direction * move_speed * delta
+	
+	# If close enough to the target, move to the next point
+		if global_transform.origin.distance_to(target_position) < 0.1:
 			global_transform.origin = target_position
-			is_moving = false
+			current_path_index += 1
+		
+		# If we reached the end of the path, stop moving
+			if current_path_index >= current_path.size():
+				is_moving = false
+				print("Reached destination.")
+			else:
+				target_position = current_path[current_path_index]
+				print("Moving to next point:", target_position)
 
 	# Handle camera rotation input (left/right arrow keys)
 	if Input.is_action_pressed("ui_left"):
@@ -88,3 +94,18 @@ func update_camera_position():
 
 	# Make the camera look at the player
 	camera.look_at(global_transform.origin, Vector3.UP)
+	
+func move_along_path(path: Array):
+	if path.size() == 0:
+		print("No path to follow.")
+		return
+	
+	current_path = path
+	current_path_index = 0
+	is_moving = true
+	
+	# Set the first target position
+	target_position = current_path[current_path_index]
+	print("Moving along path to target:", target_position)
+
+# Process function to handle smooth movement
