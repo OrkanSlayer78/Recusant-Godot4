@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://x6wwym47i4d5"
+path="res://.godot/imported/A_small_midevil_flag__0925160108_preview.obj-5e9666376766c0ba1e9963708912f1ee.mesh"
+
+[deps]
+
+files=["res://.godot/imported/A_small_midevil_flag__0925160108_preview.obj-5e9666376766c0ba1e9963708912f1ee.mesh"]
+
+source_file="res://res/obj/A_small_midevil_flag__0925160108_preview.obj"
+dest_files=["res://.godot/imported/A_small_midevil_flag__0925160108_preview.obj-5e9666376766c0ba1e9963708912f1ee.mesh", "res://.godot/imported/A_small_midevil_flag__0925160108_preview.obj-5e9666376766c0ba1e9963708912f1ee.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

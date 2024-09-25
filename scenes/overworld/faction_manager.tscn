@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dry5wujulmai7"]
+
+[ext_resource type="Script" path="res://scripts/overworld/faction_manager.gd" id="1_88oa2"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_88oa2")

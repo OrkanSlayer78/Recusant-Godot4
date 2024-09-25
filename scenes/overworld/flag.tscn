@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://blg1751yuwyv4"]
+
+[ext_resource type="ArrayMesh" uid="uid://x6wwym47i4d5" path="res://res/obj/A_small_midevil_flag__0925160108_preview.obj" id="1_aeu6p"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.205, 0, 0, 0, 0.205, 0, 0, 0, 0.205, 0, 0.192857, -0.138789)
+mesh = ExtResource("1_aeu6p")

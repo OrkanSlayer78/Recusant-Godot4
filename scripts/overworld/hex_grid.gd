@@ -1,7 +1,7 @@
 extends Node3D
 
 # Size of the hex grid
-@export var grid_radius: int = 10
+@export var grid_radius: int = 25
 
 # Size of each hex tile
 @export var hex_radius: float = 0.51
@@ -9,6 +9,13 @@ extends Node3D
 @export var hex_tile: PackedScene
 @export var player: PackedScene
 @export var poi_scene: PackedScene
+@export var faction_manager_scene: PackedScene
+@export var debug_ui_scene: PackedScene
+
+var debug_ui: Node
+var debug_mode_enabled = false
+
+var faction_manager: Node
 
 enum PointOfInterestType {
 	NONE,
@@ -39,10 +46,30 @@ func _ready():
 	humidity.noise_type = FastNoiseLite.TYPE_PERLIN
 	humidity.frequency = .02
 
-
+	#init debug UI but dont display at first
+	debug_ui = debug_ui_scene.instantiate()
+	add_child(debug_ui)
+	debug_ui.visible = false
+	
 	generate_hex_grid()
+	faction_manager = faction_manager_scene.instantiate()
+	add_child(faction_manager)
+	debug_ui.call("set_hex_map", hex_map, grid_radius)
+	faction_manager.call_deferred("generate_factions",hex_map, grid_radius)
+	faction_manager.call_deferred("simulate_factions", hex_map, 15)
 	spawn_player()
 	call_deferred("generate_roads")
+	
+func _input(event):
+	if event.is_action_pressed("debug-UI"):
+		debug_mode_enabled = !debug_mode_enabled
+		debug_ui.visible = debug_mode_enabled
+		
+		if debug_mode_enabled:
+			print("Debug UI enabled")
+		else:
+			print("Debug UI disabled")
+			
 
 func generate_hex_grid():
 	var tile_id = 0
@@ -111,7 +138,8 @@ func add_to_hex_map(hex: Node3D, q: int, r: int, tile_id: int, e_value, h_value)
 		"elevation": e_value,
 		"humidity": h_value,
 		"neighbors": get_hex_neighbors(q, r),
-		"hex_id": tile_id
+		"hex_id": tile_id,
+		"faction": null
 		}
 
 	# Debug: Print to ensure correct global position
@@ -127,7 +155,7 @@ func place_poi_on_tile(hex: Node3D, poi_type: PointOfInterestType):
 	var city_position = hex.global_transform.origin
 	# Check distance to other cities
 	for existing_city_position in city_positions:
-		if existing_city_position.distance_to(city_position) < randi_range(.3, 4) :  # Threshold distance in world units
+		if existing_city_position.distance_to(city_position) < randi_range(.1, 4) :  # Threshold distance in world units
 			#print("Skipping city placement due to proximity to another city.")
 			return  # Skip placing this city
 	
@@ -155,6 +183,10 @@ func _on_hex_selected(q: int, r: int):
 	var path = find_path_with_elevation_cost(player_position, target_position)
 	avatar.call("move_along_path", path)  # Call the player's move_along_path function
 		
+func _on_simulation_button_pressed():
+	print("Faction simulation initiated")
+	faction_manager.call("generate_factions", hex_map, grid_radius)
+	faction_manager.call("simulate_factions", hex_map, 10)
 
 func generate_roads():
 	for city_position in city_positions:
@@ -332,3 +364,5 @@ func create_debug_road(start_pos: Vector3, end_pos: Vector3):
 	
 	# Debug: Print start and end positions to verify correctness
 	print("Debug road created from", start_pos, "to", end_pos)
+
+	
