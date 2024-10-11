@@ -2,6 +2,16 @@ extends Node3D
 
 const Faction = preload("res://scripts/faction.gd")
 
+enum PointOfInterestType {
+	NONE,
+	CITY,
+	CASTLE,
+	MONASTERY,
+	RUIN,
+	DUNGEON,
+	VILLAGE
+}
+
 var factions = []  # Store generated factions
 var faction_colors = {}
 @export var faction_count: int = 5  # Number of factions to generate
@@ -50,7 +60,7 @@ func place_faction_flag_on_hex(faction_name: String, hex_position: Vector3):
 	flag.call_deferred("set_global_position", hex_position + Vector3(0, 0.1, 0))
 
 	# Get the MeshInstance3D node from the flag (adjust the path if necessary)
-	print("Flag children: ", flag.get_children())
+	#print("Flag children: ", flag.get_children())
 	var mesh_instance = flag.get_node("MeshInstance3D")
 	
 	if mesh_instance and mesh_instance.mesh:
@@ -68,7 +78,7 @@ func place_faction_flag_on_hex(faction_name: String, hex_position: Vector3):
 	else:
 		print("Error: MeshInstance3D or Mesh is missing!")
 
-	print("Placed flag for faction", faction_name, "at", hex_position)
+	#print("Placed flag for faction", faction_name, "at", hex_position)
 	
 
 # Simulate faction expansion or diplomacy
@@ -91,8 +101,12 @@ func simulate_factions(hex_map: Dictionary, iterations: int):
 								hex_map[neighbor]["faction"] = faction.faction_name
 								print(faction.faction_name, "expanded to", neighbor)
 								
-								# Place a flag to mark the conquered territory
-								place_faction_flag_on_hex(faction.faction_name, hex_map[neighbor]["position"])
+								#border draw
+								#draw_faction_border(hex_map[neighbor]["position"], faction_colors[faction.faction_name], neighbors, hex_map)
+								
+								# Place a flag for conquered territory
+								if hex_map[neighbor]["poi_type"] == PointOfInterestType.CITY:
+									place_faction_flag_on_hex(faction.faction_name, hex_map[neighbor]["position"])
 								
 								new_owned_hexes.append(neighbor)
 							else:
@@ -104,7 +118,8 @@ func simulate_factions(hex_map: Dictionary, iterations: int):
 								hex_map[neighbor]["faction"] = faction.faction_name
 								
 								# Place a flag for conquered territory
-								place_faction_flag_on_hex(faction.faction_name, hex_map[neighbor]["position"])
+								if hex_map[neighbor]["poi_type"] == PointOfInterestType.CITY:
+									place_faction_flag_on_hex(faction.faction_name, hex_map[neighbor]["position"])
 								
 								new_owned_hexes.append(neighbor)
 							else:
@@ -114,3 +129,4 @@ func simulate_factions(hex_map: Dictionary, iterations: int):
 			faction.owned_hexes.append_array(new_owned_hexes)
 		
 		iterations -= 1
+		

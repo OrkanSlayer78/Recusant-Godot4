@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://cneoyegh3vvom"]
+
+[ext_resource type="ArrayMesh" uid="uid://dhlimc67uyjku" path="res://res/obj/POI/a_wheat_field_model_f_0919133326_preview.obj" id="1_7cd1i"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5sxlv"]
+albedo_color = Color(0.57, 0.44175, 0.1425, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="AWheatFieldModelF0919133326Preview" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.135, 0, 0, 0, 0.135, 0, 0, 0, 0.135, -0.012, 0.0780597, -0.007)
+mesh = ExtResource("1_7cd1i")
+surface_material_override/0 = SubResource("StandardMaterial3D_5sxlv")

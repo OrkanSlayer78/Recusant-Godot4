@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://du4dedm4o4k"]
+
+[ext_resource type="ArrayMesh" uid="uid://dqjj2tgrx8ywf" path="res://res/obj/evergreen_tree_model__0925183912_preview.obj" id="1_6nci8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hywfr"]
+albedo_color = Color(0.485318, 0.664874, 0.254122, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="EvergreenTreeModel0925183912Preview" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.16, 0, 0, 0, 0.16, 0, 0, 0, 0.16, -0.02, 0.136, -0.003)
+mesh = ExtResource("1_6nci8")
+surface_material_override/0 = SubResource("StandardMaterial3D_hywfr")

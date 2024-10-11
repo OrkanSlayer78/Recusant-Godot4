@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Recusant"
-run/main_scene="res://scenes/overworld/Hex-Grid.tscn"
+run/main_scene="res://scenes/POI/SideViewScene.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cx5w7wkceigqw"]
+[gd_scene load_steps=8 format=3 uid="uid://cx5w7wkceigqw"]
 
 [ext_resource type="Script" path="res://scripts/overworld/hex_grid.gd" id="1_hp1do"]
 [ext_resource type="PackedScene" uid="uid://dgiyih0a7kq3t" path="res://scenes/overworld/hex_tile.tscn" id="2_hc8mb"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://d0841oqpcivuj" path="res://scenes/overworld/POI.tscn" id="4_pdg3t"]
 [ext_resource type="PackedScene" uid="uid://cs4buhu2diykl" path="res://scenes/overworld/debugUI.tscn" id="5_dpsoj"]
 [ext_resource type="PackedScene" uid="uid://dry5wujulmai7" path="res://scenes/overworld/faction_manager.tscn" id="5_lw80t"]
+[ext_resource type="PackedScene" uid="uid://dmbwbeqq2g56q" path="res://scenes/foliage.tscn" id="7_xoc5m"]
 
 [node name="Hex-Grid" type="Node3D"]
 script = ExtResource("1_hp1do")
@@ -14,6 +15,7 @@ player = ExtResource("3_w26oj")
 poi_scene = ExtResource("4_pdg3t")
 faction_manager_scene = ExtResource("5_lw80t")
 debug_ui_scene = ExtResource("5_dpsoj")
+biome_script = ExtResource("7_xoc5m")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.758248, -0.189768, 0.623737, -1.27231e-08, 0.956702, 0.29107, -0.651966, 0.220703, -0.725417, 2, 1, 0)

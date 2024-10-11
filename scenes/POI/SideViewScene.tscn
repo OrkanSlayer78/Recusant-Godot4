@@ -1,0 +1,69 @@
+[gd_scene load_steps=9 format=3 uid="uid://cnpnjjwotnvgo"]
+
+[ext_resource type="Texture2D" uid="uid://2httm4ypxaex" path="res://scenes/POI/orkanslayer78_a_blue_sky_with_white_fluffy_clouds_in_the_pixel__016b10c0-9c76-4f9e-af54-af201f97c3c7.png" id="1_k0co0"]
+[ext_resource type="Texture2D" uid="uid://dqtgiabt0i7a3" path="res://scenes/POI/npc placeholder.png" id="2_5d75k"]
+[ext_resource type="Script" path="res://scenes/POI/POI.gd" id="3_8sey5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j6g6y"]
+albedo_texture = ExtResource("1_k0co0")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dqjiq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k2gmk"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_p63s2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nrr3b"]
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("2_5d75k")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Backdrop" type="MeshInstance3D" parent="."]
+transform = Transform3D(6.315, 0, 0, 0, -2.76037e-07, -6.315, 0, 6.315, -2.76037e-07, 0.641877, 0, -3.31529)
+material_override = SubResource("StandardMaterial3D_j6g6y")
+mesh = SubResource("PlaneMesh_dqjiq")
+surface_material_override/0 = SubResource("StandardMaterial3D_k2gmk")
+
+[node name="NPC" type="CharacterBody3D" parent="."]
+
+[node name="NPC image" type="MeshInstance3D" parent="NPC"]
+transform = Transform3D(0.256, 0, 0, 0, -7.86805e-09, -0.62, 0, 0.18, -2.71011e-08, 0.609793, 0.0554964, 0)
+mesh = SubResource("PlaneMesh_p63s2")
+surface_material_override/0 = SubResource("StandardMaterial3D_nrr3b")
+
+[node name="Player Character" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.24883, 0, 0)
+
+[node name="NPC implayer imageage" type="MeshInstance3D" parent="Player Character"]
+transform = Transform3D(-0.256, -1.57361e-08, 2.36925e-15, 0, -7.86805e-09, -0.62, 2.23802e-08, -0.18, 2.71011e-08, 0.609793, 0.0554964, 0)
+mesh = SubResource("PlaneMesh_p63s2")
+surface_material_override/0 = SubResource("StandardMaterial3D_nrr3b")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.666667, -0.245478, 0.703773, -0.324369, 0.754561, 0.570459, -0.671075, -0.608588, 0.423415, 2.06342, 3.13083, 3.29958)
+shadow_enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("3_8sey5")
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+offset_left = 456.0
+offset_top = 591.0
+offset_right = 700.0
+offset_bottom = 634.0
+text = "Interact with NPC"
+
+[node name="Button2" type="Button" parent="CanvasLayer"]
+offset_left = 449.0
+offset_top = 9.0
+offset_right = 692.0
+offset_bottom = 51.0
+text = "Return to Overworld"
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.148472, 0.859441)
+
+[connection signal="pressed" from="CanvasLayer/Button" to="CanvasLayer" method="_on_interact_with_npc_pressed"]
+[connection signal="pressed" from="CanvasLayer/Button2" to="CanvasLayer" method="_on_return_to_overworld_pressed"]

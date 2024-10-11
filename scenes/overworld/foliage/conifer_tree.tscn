@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6601pr3mi8u1"]
+
+[ext_resource type="ArrayMesh" uid="uid://b6efpj10u5xf1" path="res://res/obj/a_Small_pine_tree_mod_0925183853_preview.obj" id="1_7c1d7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_evcsv"]
+albedo_color = Color(0.27018, 0.422285, 0.20468, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="ASmallPineTreeMod0925183853Preview" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.24, 0, 0, 0, 0.24, 0, 0, 0, 0.24, 0.007, 0.239973, -0.00426594)
+mesh = ExtResource("1_7c1d7")
+surface_material_override/0 = SubResource("StandardMaterial3D_evcsv")

@@ -14,6 +14,7 @@ signal hex_selected(q,r)
 
 var q: int
 var r: int
+var hex_biome: Biome
 
 # Cache the mesh instance and material reference
 var mesh_instance: MeshInstance3D
@@ -49,18 +50,19 @@ func generate_biome(elevation: float, humidity: float) -> Biome:
 	var biome: Biome = get_biome_from_elevation(elevation)
 	adjust_height(biome, elevation)
 	adjust_color(elevation, humidity)
+	hex_biome = biome
 	return biome
 
 # Determine the biome based on elevation
 func get_biome_from_elevation(elevation: float) -> Biome:
 	if elevation < -0.2:
-		return Biome.PLAINS
-	elif elevation < 0.3:
-		return Biome.HILLS
-	elif elevation < 0.6:
 		return Biome.SWAMP
-	elif elevation < 0.8:
+	elif elevation < 0.3:
+		return Biome.PLAINS
+	elif elevation < 0.4:
 		return Biome.FIELDS
+	elif elevation < 0.6:
+		return Biome.HILLS
 	else:
 		return Biome.MOUNTAINS
 
@@ -70,20 +72,20 @@ func adjust_height(biome: Biome, elevation: float) -> float:
 	var height_adjustment: float = 0
 
 	# Adjust the height and scale based on the biome
-	if biome == Biome.PLAINS:
+	if biome == Biome.SWAMP:
 		height_adjustment = elevation
-		scale_adjustment = 3
-	elif biome == Biome.HILLS:
-		height_adjustment = elevation * 2
-		scale_adjustment = 5 
-	elif biome == Biome.SWAMP:
+		scale_adjustment = 1
+	elif biome == Biome.PLAINS:
 		height_adjustment = elevation * 3
-		scale_adjustment = 5
+		scale_adjustment = 5 
 	elif biome == Biome.FIELDS:
 		height_adjustment = elevation * 5
 		scale_adjustment = 5
-	elif biome == Biome.MOUNTAINS:
+	elif biome == Biome.HILLS:
 		height_adjustment = elevation * 10
+		scale_adjustment = 5
+	elif biome == Biome.MOUNTAINS:
+		height_adjustment = elevation * 20
 		scale_adjustment = 10
 
 	# Modify the height (Y position) of the mesh
@@ -103,16 +105,16 @@ func adjust_color(elevation: float, humidity: float) -> void:
 
 	# Define base color depending on the elevation
 	var base_color: Color
-	if elevation < -0.4:
-		base_color = Color(183/256.0, 172/256.0, 66/256.0)  # plains
-	elif elevation < 0.1:
-		base_color = Color(58/256.0, 71/256.0, 31/256.0)  # hill
+	if elevation < -0.2:
+		base_color = Color(140/256.0, 102/256.0, 81/256.0) #swamp 
 	elif elevation < 0.3:
-		base_color = Color(49/256.0, 42/256.0, 42/256.0)  # swamp
-	elif elevation < 0.5:
-		base_color = Color(162/256.0, 163/256.0, 119/256.0)  # fields
+		base_color = Color(81/256.0, 89/256.0, 26/256.0)  # plains
+	elif elevation < 0.4:
+		base_color = Color(136/256.0, 140/256.0, 39/256.0)  # fields
+	elif elevation < 0.6:
+		base_color = Color(161/256.0, 165/256.0, 31/256.0)  # hill
 	else:
-		base_color = Color(109/256.0, 124/256.0, 122/256.0)  # mountains
+		base_color = Color(197/256.0, 205/256.0, 216/256.0)  # mountains
 
 	# Adjust the color's blueness based on humidity
 	var blue_adjustment = clamp(humidity, 0.0, 0.75)

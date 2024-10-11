@@ -11,9 +11,11 @@ extends Node3D
 @export var poi_scene: PackedScene
 @export var faction_manager_scene: PackedScene
 @export var debug_ui_scene: PackedScene
+@export var biome_script: PackedScene
 
 var debug_ui: Node
 var debug_mode_enabled = false
+var biome_generator: Node
 
 var faction_manager: Node
 
@@ -42,7 +44,7 @@ func _ready():
 	elevation.seed = randi()
 	humidity.seed = randi()
 	elevation.noise_type = FastNoiseLite.TYPE_SIMPLEX
-	elevation.frequency = 0.2
+	elevation.frequency = 0.15
 	humidity.noise_type = FastNoiseLite.TYPE_PERLIN
 	humidity.frequency = .02
 
@@ -50,8 +52,11 @@ func _ready():
 	debug_ui = debug_ui_scene.instantiate()
 	add_child(debug_ui)
 	debug_ui.visible = false
+	biome_generator = biome_script.instantiate()
+	add_child(biome_generator)
 	
 	generate_hex_grid()
+
 	faction_manager = faction_manager_scene.instantiate()
 	add_child(faction_manager)
 	debug_ui.call("set_hex_map", hex_map, grid_radius)
@@ -94,16 +99,19 @@ func generate_hex_grid():
 			# Call the biome generation method if available
 			if hex and hex.has_method("generate_biome"):
 				biome = hex.call_deferred("generate_biome",e_value, h_value)
-				hex.call_deferred("set_meta", "biome", biome)
-				hex.global_transform.origin.y = e_value * 0.4
+				hex.global_transform.origin.y = e_value * 0.7
+				biome_generator.call_deferred("generate_forest_foliage",hex, e_value, h_value, hex_radius - .2)
 			hex.call_deferred("set_global_position", hex_to_world_position(q, r, hex.transform.origin))
 			var roll = randf()
+			var poi_type = PointOfInterestType.NONE
 			if roll < city_chance:
-				var poi_type = PointOfInterestType.CITY
+				poi_type = PointOfInterestType.CITY
 				call_deferred("place_poi_on_tile",hex, poi_type)
+				
+				
 			#hex.call_deferred("adjust_height", biome, e_value)
 			
-			call_deferred("add_to_hex_map", hex, q, r, tile_id, e_value, h_value)
+			call_deferred("add_to_hex_map", hex, q, r, tile_id, e_value, h_value, poi_type)
 			#create hex map to do pathfinding and other calculations
 	
 			
@@ -115,7 +123,7 @@ func hex_to_world_position(q: int, r: int, current_position: Vector3) -> Vector3
 	var z = hex_radius * sqrt(3) * (r + q / 2.0)
 	return Vector3(x, current_position.y, z)
 
-func add_to_hex_map(hex: Node3D, q: int, r: int, tile_id: int, e_value, h_value):
+func add_to_hex_map(hex: Node3D, q: int, r: int, tile_id: int, e_value, h_value, poi_type):
 	var position = hex.global_transform.origin
 
 	# Add the hex to global AStar
@@ -139,7 +147,8 @@ func add_to_hex_map(hex: Node3D, q: int, r: int, tile_id: int, e_value, h_value)
 		"humidity": h_value,
 		"neighbors": get_hex_neighbors(q, r),
 		"hex_id": tile_id,
-		"faction": null
+		"faction": null,
+		"poi_type": poi_type
 		}
 
 	# Debug: Print to ensure correct global position
